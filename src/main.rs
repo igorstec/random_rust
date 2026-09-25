@@ -11,6 +11,7 @@ fn main() {
     println!("{}", v1[3]);
     println!("{}", el);
     how_demo_rust_features_work();
+    demo_print_rust();
 }
 
 // unique pointer in c++
@@ -98,4 +99,53 @@ pub fn how_demo_rust_features_work() {
         .filter(|s| matches!(s, Shape::Circle { .. }))
         .collect();
     println!("Liczba kół: {}", circles.len());
+}
+
+/// Różne sposoby wypisania tego samego napisu "R U S T".
+pub fn demo_print_rust() {
+    let word = "RUST";
+
+    // 1. Zwykły literał
+    println!("R U S T");
+
+    // 2. join na wektorze znaków zamienionych na String
+    let letters: Vec<String> = word.chars().map(|c| c.to_string()).collect();
+    println!("{}", letters.join(" "));
+
+    // 3. Pętla for z flagą dla pierwszego znaku
+    for (i, c) in word.chars().enumerate() {
+        if i > 0 {
+            print!(" ");
+        }
+        print!("{c}");
+    }
+    println!();
+
+    // 4. fold budujący String
+    let folded = word.chars().fold(String::new(), |mut acc, c| {
+        if !acc.is_empty() {
+            acc.push(' ');
+        }
+        acc.push(c);
+        acc
+    });
+    println!("{folded}");
+
+    // 5. Z małych liter przez to_ascii_uppercase
+    let lower = "r u s t";
+    println!("{}", lower.to_ascii_uppercase());
+
+    // 6. Z bajtów ASCII
+    let bytes = [b'R', b' ', b'U', b' ', b'S', b' ', b'T'];
+    println!("{}", String::from_utf8_lossy(&bytes));
+
+    // 7. Z kodów Unicode przez char::from_u32
+    let s: String = [82, 32, 85, 32, 83, 32, 84]
+        .iter()
+        .filter_map(|&n| char::from_u32(n))
+        .collect();
+    println!("{s}");
+
+    // 8. Formatowanie z wyrównaniem do szerokości 11, na środek
+    println!("[{:^11}]", "R U S T");
 }
